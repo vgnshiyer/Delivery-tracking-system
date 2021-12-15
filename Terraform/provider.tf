@@ -4,6 +4,6 @@ provider "aws"{
  secret_key = var.aws_secret_key
  
  assume_role {
-  role_arn = "arn:aws:iam::206298038794:role/EtPowerUserRole"
+  role_arn = "arn:aws:iam::206298038794:role/admin-etsandbox"
  }
 }
