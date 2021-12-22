@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 import time
 
-f = open('bus1Data.json')
+f = open('bus_data.json')
 busData = json.load(f)
 
 busData = busData['features'][0]['geometry']['coordinates']
