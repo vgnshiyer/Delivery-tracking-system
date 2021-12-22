@@ -18,7 +18,7 @@ def generateBusRecord(coordinates):
     }
     return busRecord
 
-producer = KafkaProducer(bootstrap_servers=['kafka:9071'],value_serializer=lambda x:dumps(x).encode('utf-8'))
+producer = KafkaProducer(bootstrap_servers=['kafka:9071'],value_serializer=lambda x:json.dumps(x).encode('utf-8'))
 
 print("Producing bus coordinates..")
 i=0

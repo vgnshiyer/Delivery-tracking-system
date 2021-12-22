@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
       - name: position-simulator
-        image: vignesh/bus-tracker-app:latest
-        imagePullPolicy: Never
+        image: brax2507/bus-1-simulator:latest
         volumeMounts:
         - name: kafka-properties
           mountPath: /mnt
