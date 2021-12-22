@@ -7,3 +7,4 @@ provider "aws"{
   role_arn = "arn:aws:iam::206298038794:role/admin-etsandbox"
  }
 }
+#https://signin.aws.amazon.com/switchrole?roleName=admin-etsandbox&account=etsandbox
