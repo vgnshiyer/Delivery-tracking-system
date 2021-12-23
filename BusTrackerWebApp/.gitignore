@@ -1,2 +1,7 @@
 # created by virtualenv automatically
-
+Lib
+Scripts
+src
+pyvenv.cfg
+Readme.txt
+.gitignore
