@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from './api-service.service';
 import { map, Subscription, timer } from 'rxjs';
-import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 
 declare const L: any;
 
@@ -24,11 +23,11 @@ export class AppComponent  implements OnInit{
     let mapmarkers1 = [73.00621032714844,19.114029215761995];
     let mapmarkers2 = [73.00981521606445,19.073637115022702];
     this.InitMap(mapmarkers1,mapmarkers2);
-    // this.timerSubscription = timer(0, 5000).pipe(
-    //   map(() => {
-    //     this.test();
-    //   })
-    // ).subscribe();
+    this.timerSubscription = timer(0, 5000).pipe(
+      map(() => {
+        this.test();
+      })
+    ).subscribe();
   }
 
   InitMap(coords1: any,coords2: any){
