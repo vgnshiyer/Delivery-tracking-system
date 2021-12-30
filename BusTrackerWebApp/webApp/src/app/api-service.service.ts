@@ -13,9 +13,26 @@ export class ApiServiceService {
 
   GetCoords() {
     this.http.get<any>(this.host + this.path).subscribe(
-      res => {
+      (      res: never[]) => {
         console.log("response:",res);
         this.coords = res;
       })
+  }
+
+  GetCoordEvents() {
+    let source = new EventSource('http://localhost:5000/messages')
+    source.addEventListener('message', message =>{
+      console.log(message.data);
+      // this.coords = JSON.parse(message.data)
+    });
+    source.onmessage = (message) => {
+      console.log('message recvd');
+      console.log(message.data);
+    }
+    source.onerror = (e) => {
+      console.log('connection error');
+      console.log(e);
+      source.close();
+    }
   }
 }
