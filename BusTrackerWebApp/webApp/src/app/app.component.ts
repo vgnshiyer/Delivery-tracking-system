@@ -19,7 +19,6 @@ export class AppComponent  implements OnInit{
   timerSubscription: Subscription = new Subscription;
   ngOnInit() {
     
-    
     let mapmarkers1 = [73.00621032714844,19.114029215761995];
     let mapmarkers2 = [73.00981521606445,19.073637115022702];
     this.InitMap(mapmarkers1,mapmarkers2);
