@@ -42,7 +42,7 @@ def sendData(topicname):
             i=0
 
 try:
-    ## can add any number of processes
+    ## can add any number of producers
     p1 = threading.Thread(target=sendData, args=('vign-test-topic',))
     p2 = threading.Thread(target=sendData, args=('vign-test-topic-2',))
 
