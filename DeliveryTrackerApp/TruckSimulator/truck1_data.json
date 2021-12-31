@@ -1,4 +1,6 @@
 {
+  "truckNumber": 9,
+  "truckType": "Nano Truck",
   "type": "FeatureCollection",
   "features": [
     {
