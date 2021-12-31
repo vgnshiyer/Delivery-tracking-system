@@ -19,20 +19,10 @@ export class AppComponent  implements OnInit{
   timerSubscription: Subscription = new Subscription;
   ngOnInit() {
     
-    let mapmarkers1 = [73.00621032714844,19.114029215761995];
+    let mapmarkers1: Array<any> = [];
     let mapmarkers2 = [73.00981521606445,19.073637115022702];
-    this.InitMap(mapmarkers1,mapmarkers2);
-    // this.timerSubscription = timer(0, 5000).pipe(
-    //   map(() => {
-    //     this.test();
-    //   })
-    // ).subscribe();
-    this.CallApi();
-  }
-
-  InitMap(coords1: any,coords2: any){
     let coords = [19.0330, 73.0297];
-    let mapid = L.map('map').setView(coords, 12);
+    let map = L.map('map').setView(coords, 12);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
@@ -40,22 +30,21 @@ export class AppComponent  implements OnInit{
     tileSize: 512,
     zoomOffset: -1,
     accessToken: 'pk.eyJ1IjoiYnJheDI1MDciLCJhIjoiY2t4azgyOXBxNmRwaDJ1cTNjMGRqcjF3ZCJ9.0pJi--39nsT8km17AeiY3g'
-    }).addTo(mapid);
-    // coord 1
-    var geojson = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"marker-color":"#6b9cd1","marker-size":"medium","marker-symbol":""},"geometry":{"type":"Point","coordinates":coords1}}]};
-    //using geojson with leaflet
-    L.geoJSON(geojson).addTo(mapid);
+    }).addTo(map);
     // coord 2
-    var geojson = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"marker-color":"#6b9cd1","marker-size":"medium","marker-symbol":""},"geometry":{"type":"Point","coordinates":coords2}}]};
-    L.geoJSON(geojson).addTo(mapid);
-  }
-
-  CallApi(){
-    this.apiService.GetCoordEvents();
-  }
-
-  test(){
-    console.log("calling again and again");
+    // var geojson = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"marker-color":"#6b9cd1","marker-size":"medium","marker-symbol":""},"geometry":{"type":"Point","coordinates":mapmarkers2}}]};
+    // L.geoJSON(geojson).addTo(mapid);
+    //making api call to get coordinates for vehicle 1
+    this.apiService.GetCoordEvents('http://localhost:5000/messages').subscribe((message: any) => {
+      let res = JSON.parse(message);
+      let coords = res.coordinates;
+      console.log(coords);
+        for (var i = 0; i < mapmarkers1.length; i++) {
+          map.removeLayer(mapmarkers1[i]);
+        }
+        let marker1 = L.marker([coords.longitude,coords.latitude]).addTo(map);
+        mapmarkers1.push(marker1);
+    });
   }
 
   ngOnDestroy(): void {

@@ -1,17 +1,38 @@
 from flask import Flask
 import flask
 import time
+from flask_cors import CORS
+import json
+from datetime import datetime
 
 app = Flask(__name__)
+CORS(app)
 
 global record
 
+f = open('bus_data.json')
+busData = json.load(f)
+busData = busData['features'][0]['geometry']['coordinates']
+
+def generateBusRecord(coordinates):
+    busRecord = {
+        "name": "Ghansoli-Vashi",
+        "busNumber": 9,
+        "timestamp": (datetime.utcnow()).strftime("%d/%m/%Y %H:%M:%S"),
+        "coordinates": { "latitude": coordinates[0], "longitude": coordinates[1]}
+    }
+    return busRecord
+
 def sendEvents():
-    record=0
-    while(1):
-        record+=1
+    i=0
+    #produce coordinates infinitely
+    while(i<len(busData)):
+        busRecord=generateBusRecord(busData[i])
         time.sleep(3)
-        yield 'data: \t recordNum'+ str(record) +' hello from api!'
+        yield 'data:{0}\n\n'.format(json.dumps(busRecord))
+        i+=1
+        if i==len(busData):
+            i=0       
 
 @app.route('/messages', methods=['GET'])
 def stream():
