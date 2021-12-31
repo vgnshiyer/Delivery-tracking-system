@@ -11,13 +11,13 @@ app = Flask(__name__)
 CORS(app)
 # initialize consumer
 consumer = KafkaConsumer(bootstrap_servers=['kafka:9071'],value_deserializer=lambda x:json.loads(x.encode('utf-8')))
-topicname = 'vign-test-topic'
+
 def get_message(topicname):
     consumer.subscribe([topicname])
     for msg in consumer:
         yield 'data:{0}\n\n'.format(json.dumps(msg))
 
-@app.route('/messages', methods=['GET'])
+@app.route('/messages/<string:topicname>/', methods=['GET'])
 def stream():
     return Response(get_message(topicname), mimetype='text/event-stream')
 
