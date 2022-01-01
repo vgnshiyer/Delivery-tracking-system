@@ -27,9 +27,9 @@ def initProducer():
     producer = KafkaProducer(bootstrap_servers=['kafka:9071'],value_serializer=lambda x:json.dumps(x).encode('utf-8'))
     return producer
 
-def sendData(topicname):
+def sendData(topicname,jsonfile):
     print("Producing truck coordinates..")
-    truckNumber,truckType,truckCoords = getTruckData('truck1_data.json')
+    truckNumber,truckType,truckCoords = getTruckData(jsonfile)
     i=0
     producer = initProducer()
     #produce coordinates infinitely
@@ -43,8 +43,8 @@ def sendData(topicname):
 
 try:
     ## can add any number of producers
-    p1 = threading.Thread(target=sendData, args=('vign-test-topic',))
-    p2 = threading.Thread(target=sendData, args=('vign-test-topic-2',))
+    p1 = threading.Thread(target=sendData, args=('vign-test-topic','truck1_data.json',))
+    p2 = threading.Thread(target=sendData, args=('vign-test-topic-2','truck2_data.json',))
 
     p1.start()
     p2.start()
