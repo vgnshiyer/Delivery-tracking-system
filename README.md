@@ -20,6 +20,9 @@ Step 2: Pull the Helm repo for confluent operator<br>
 helm repo add confluentinc https://packages.confluent.io/helm<br>
 helm repo update
 
+Switch to confluent namespace to default
+kubectl config set-context --current --namespace confluent
+
 Step 3: Install the Confluent operator using Helm3<br>
 helm upgrade --install confluent-operator confluentinc/confluent-for-kubernetes
 
