@@ -13,6 +13,7 @@ To demonstrate the working of the Kafka cluster on kubernetes, we will also be d
 * Kubectl installed
 
 Step 1: Create a different namespace for our kafka cluster
+<br>
 kubectl create namespace confluent
 
 Step 2: Pull the Helm repo for confluent operator
