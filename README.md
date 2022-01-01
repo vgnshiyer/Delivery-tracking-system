@@ -16,11 +16,11 @@ Step 1: Create a different namespace for our kafka cluster
 <br>
 kubectl create namespace confluent
 
-Step 2: Pull the Helm repo for confluent operator
-helm repo add confluentinc https://packages.confluent.io/helm
+Step 2: Pull the Helm repo for confluent operator<br>
+helm repo add confluentinc https://packages.confluent.io/helm<br>
 helm repo update
 
-Step 3: Install the Confluent operator using Helm3
+Step 3: Install the Confluent operator using Helm3<br>
 helm upgrade --install confluent-operator confluentinc/confluent-for-kubernetes
 
 This will install and deploy multiple resources (CRDS, RBAC's for our cluster) including the confluent Operator.
@@ -31,19 +31,19 @@ Now we can begin deploying some kafka specific resouces to the cluster(eg broker
 
 Step 4: Navigate to the Confluent-Operator-deployment.
 
-Step 5: Deploy the KafkaWorkloads.yaml file
-This is a development cluster in minikube. This has only one zookeeper, one broker, one control center.
+Step 5: Deploy the KafkaWorkloads.yaml file<br>
+This is a development cluster in minikube. This has only one zookeeper, one broker, one control center.<br>
 You can scale according to the size of your cluster.
 
 kubectl apply -f KafkaWorkloads.yaml
 
-Step 6: You should see a one zookeeper, one broker cluster running on your kubernetes cluster
+Step 6: You should see a one zookeeper, one broker cluster running on your kubernetes cluster.<br>
 kubectl get po
 
 The confluent operator was responsible for creating the kafka broker and zookeeper pods.
 
-Step 7: Deploy the client console pod.
-This pod is not necessary to be deployed if you have the control center pod running. This pod allows kafka admins to run kafka specific commands on the cluster.
+Step 7: Deploy the client console pod.<br>
+This pod is not necessary to be deployed if you have the control center pod running. This pod allows kafka admins to run kafka specific commands on the cluster.<br>
 kubectl apply -f KafkaClientConsole.yaml
 
 If all aforementioned steps were performed successfully, you should have a whole working kafka cluster running on your kubernetes engine.
