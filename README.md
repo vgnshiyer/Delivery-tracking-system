@@ -35,7 +35,7 @@ Now we can begin deploying some kafka specific resouces to the cluster(eg broker
 Step 4: Navigate to the Confluent-Operator-deployment dir.
 
 Step 5: Deploy the KafkaWorkloads.yaml file<br>
-This is a development cluster in minikube. This has only one zookeeper, one broker, one control center.<br>
+This is a development cluster in minikube. This has only one zookeeper, two broker, one control center.<br>
 You can scale according to the size of your cluster.
 
 kubectl apply -f KafkaWorkloads.yaml
