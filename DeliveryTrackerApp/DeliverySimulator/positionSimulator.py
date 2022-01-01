@@ -5,6 +5,11 @@ from datetime import datetime
 import time
 import threading
 import sys
+import os
+
+global kafka_endpt
+def getKafkaEndpoint():
+    kafka_endpt = os.environ.get('KAFKA_BROKER_ENDPT')
 
 def getTruckData(jsonfile):
     f = open(jsonfile)
@@ -24,7 +29,7 @@ def generateTruckRecord(coordinates,truckNumber,truckType):
     return truckRecord
 
 def initProducer():
-    producer = KafkaProducer(bootstrap_servers=['kafka:9071'],value_serializer=lambda x:json.dumps(x).encode('utf-8'))
+    producer = KafkaProducer(bootstrap_servers=[str(kafka_endpt)+':9071'],value_serializer=lambda x:json.dumps(x).encode('utf-8'))
     return producer
 
 def sendData(topicname,jsonfile):
@@ -39,9 +44,11 @@ def sendData(topicname,jsonfile):
         producer.send(topicname, value=truckRecord)
         i+=1
         if i==len(truckCoords):
+            truckCoords = truckCoords[::-1]
             i=0
 
 try:
+    getKafkaEndpoint()
     ## can add any number of producers
     p1 = threading.Thread(target=sendData, args=('vign-test-topic','truck1_data.json',))
     p2 = threading.Thread(target=sendData, args=('vign-test-topic-2','truck2_data.json',))

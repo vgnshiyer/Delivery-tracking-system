@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-simulator
+  labels:
+    app: delivery-simulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery-simulator
+  template:
+    metadata:
+      labels:
+        app: delivery-simulator
+    spec:
+      containers:
+      - name: delivery-simulator
+        image: brax2507/delivery-simulator:v1
+        env:
+        - name: KAFKA_BROKER_ENDPT
+          value: 'kafka'
