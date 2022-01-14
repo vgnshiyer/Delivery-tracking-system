@@ -11,9 +11,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-global kafka_endpt
-def getKafkaEndpoint():
-    kafka_endpt = os.environ.get('KAFKA_BROKER_ENDPT')
+kafka_endpt = os.environ.get('KAFKA_BROKER_ENDPT')
 
 # initialize consumer
 consumer = KafkaConsumer(bootstrap_servers=[str(kafka_endpt)+':9071'],value_deserializer=lambda x:json.loads(x.encode('utf-8')))

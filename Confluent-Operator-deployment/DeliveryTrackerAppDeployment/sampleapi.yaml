@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sampleapi
+  labels:
+    app: sampleapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sampleapi
+  template:
+    metadata:
+      labels:
+        app: sampleapi
+    spec:
+      containers:
+      - name: sampleapi
+        image: api:latest
+        imagePullPolicy: Never
+        readinessProbe: 
+          httpGet: 
+             path: /
+             port: 5000
+        ports: 
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: sampleapi
+spec:
+   selector:
+      app: sampleapi
+   ports:
+      - name: http
+        port: 5000
+   type: ClusterIP

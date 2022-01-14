@@ -35,7 +35,7 @@ export class AppComponent  implements OnInit{
     // var geojson = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"marker-color":"#6b9cd1","marker-size":"medium","marker-symbol":""},"geometry":{"type":"Point","coordinates":mapmarkers2}}]};
     // L.geoJSON(geojson).addTo(mapid);
     //making api call to get coordinates for vehicle 1
-    this.apiService.GetCoordEvents('delivery-tracker:5000/messages/vign-test-topic').subscribe((message: any) => {
+    this.apiService.GetCoordEvents('http://sampleapi:5000/messages').subscribe((message: any) => {
       let res = JSON.parse(message);
       let coords = res.coordinates;
       console.log(coords);

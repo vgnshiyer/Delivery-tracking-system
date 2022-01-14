@@ -5,7 +5,7 @@ metadata:
   labels:
     app: webapp
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: webapp
@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: brax2507/delivery-simulator-webapp:v1
+        image: webapp:latest
+        imagePullPolicy: Never
         ports: 
         - containerPort: 80
 ---
@@ -32,5 +33,4 @@ spec:
    ports:
       - name: http
         port: 80
-        nodePort: 30080
-   type: NodePort
+   type: ClusterIP

@@ -8,11 +8,11 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
-global record
-
-f = open('bus_data.json')
-busData = json.load(f)
-busData = busData['features'][0]['geometry']['coordinates']
+def initialize():
+    f = open('bus_data.json')
+    busData = json.load(f)
+    busData = busData['features'][0]['geometry']['coordinates']
+    return busData
 
 def generateBusRecord(coordinates):
     busRecord = {
@@ -23,7 +23,7 @@ def generateBusRecord(coordinates):
     }
     return busRecord
 
-def sendEvents():
+def sendEvents(busData):
     i=0
     #produce coordinates infinitely
     while(i<len(busData)):
@@ -32,11 +32,13 @@ def sendEvents():
         yield 'data:{0}\n\n'.format(json.dumps(busRecord))
         i+=1
         if i==len(busData):
+            busData = busData[::-1]
             i=0       
 
 @app.route('/messages', methods=['GET'])
 def stream():
-    return flask.Response(sendEvents(), mimetype='text/event-stream')
+    busData = initialize()
+    return flask.Response(sendEvents(busData), mimetype='text/event-stream')
 
 @app.route('/', methods=['GET'])
 def index():

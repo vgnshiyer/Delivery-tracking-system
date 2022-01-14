@@ -7,9 +7,7 @@ import threading
 import sys
 import os
 
-global kafka_endpt
-def getKafkaEndpoint():
-    kafka_endpt = os.environ.get('KAFKA_BROKER_ENDPT')
+kafka_endpt = os.environ.get('KAFKA_BROKER_ENDPT')
 
 def getTruckData(jsonfile):
     f = open(jsonfile)
@@ -47,14 +45,23 @@ def sendData(topicname,jsonfile):
             truckCoords = truckCoords[::-1]
             i=0
 
-try:
-    getKafkaEndpoint()
-    ## can add any number of producers
-    p1 = threading.Thread(target=sendData, args=('vign-test-topic','truck1_data.json',))
-    p2 = threading.Thread(target=sendData, args=('vign-test-topic-2','truck2_data.json',))
+def getDeliveryVans(dir):
+    vehicles=os.listdir(dir)
+    kafkatopics=[]
+    for i in vehicles:
+        data = json.load(i)
+        kafkatopics.append(data['kafkaTopicName'])
+    return vehicles, kafkatopics
+    
+def startParallerProducer(topicname, jsonfile):
+    p = threading.Thread(target=sendData, args=(topicname,jsonfile,))
+    p.start()
 
-    p1.start()
-    p2.start()
+try:
+    vehicles, kafkatopics = getDeliveryVans("DeliverVans")
+    for i in range(0,len(vehicles)):
+        startParallerProducer(kafkatopics[i],"DeliveryVans/"+str(vehicles[i]))
+    
 except Exception as e:
     excp = sys.exc_info()
     print("The program exited with the following error message at line "+str(excp[2].tb_lineno)+": \n")
