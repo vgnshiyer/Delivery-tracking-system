@@ -49,8 +49,11 @@ def getDeliveryVans(dir):
     vehicles=os.listdir(dir)
     kafkatopics=[]
     for i in vehicles:
-        data = json.load(i)
-        kafkatopics.append(data['kafkaTopicName'])
+        if i != "readme.txt":
+            data = json.load(i)
+            kafkatopics.append(data['kafkaTopicName'])
+        else:
+            vehicles.remove("readme.txt")
     return vehicles, kafkatopics
     
 def startParallerProducer(topicname, jsonfile):
