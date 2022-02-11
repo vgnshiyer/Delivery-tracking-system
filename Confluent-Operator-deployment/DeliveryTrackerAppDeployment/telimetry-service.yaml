@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: delivery-tracker
+  name: telimetry-service
   labels:
-    app: delivery-tracker
+    app: telimetry-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: delivery-tracker
+      app: telimetry-service
   template:
     metadata:
       labels:
-        app: delivery-tracker
+        app: telimetry-service
     spec:
       containers:
-      - name: delivery-tracker
-        image: brax2507/delivery-tracker:v1
+      - name: telimetry-service
+        image: brax2507/telimetry-service:v1
         readinessProbe: 
           httpGet: 
              path: /
@@ -37,10 +37,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-   name: delivery-tracker
+   name: telimetry-service
 spec:
    selector:
-      app: delivery-tracker
+      app: telimetry-service
    ports:
       - name: http
         port: 5000

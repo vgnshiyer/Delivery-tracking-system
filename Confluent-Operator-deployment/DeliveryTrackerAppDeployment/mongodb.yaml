@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:3.5.6-jessie        
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: mongo
+spec:
+   selector:
+      app: mongo
+   ports:
+      - name: mongo port
+        port: 27017
+   type: ClusterIP
