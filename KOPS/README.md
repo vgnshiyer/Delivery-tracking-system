@@ -1,0 +1,1 @@
+### Launch a t2.micro and install KOPS, instead of using personal machine
