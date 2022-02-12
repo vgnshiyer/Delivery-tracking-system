@@ -1,0 +1,71 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: "2022-01-14T11:45:05Z"
+  generation: 1
+  name: vign.k8s.local
+spec:
+  api:
+    loadBalancer:
+      class: Classic
+      type: Public
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://vign-kops-cluster-state/vign.k8s.local
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: master-us-east-1a
+      name: a
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: master-us-east-1a
+      name: a
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  - ::/0
+  kubernetesVersion: 1.22.4
+  masterInternalName: api.internal.vign.k8s.local
+  masterPublicName: api.vign.k8s.local
+  networkCIDR: 172.31.0.0/16
+  networkID: vpc-0f7ca572
+  networking:
+    kubenet: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  - ::/0
+  subnets:
+  - cidr: 172.31.32.0/20
+    id: subnet-6391183c
+    name: us-east-1a
+    type: Public
+    zone: us-east-1a
+  - cidr: 172.31.0.0/20
+    id: subnet-b0d65ad6
+    name: us-east-1b
+    type: Public
+    zone: us-east-1b
+  - cidr: 172.31.80.0/20
+    id: subnet-6844cf49
+    name: us-east-1c
+    type: Public
+    zone: us-east-1c
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public

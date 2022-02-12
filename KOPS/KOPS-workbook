@@ -1,0 +1,23 @@
+export NAME=vign.k8s.local
+export KOPS_STATE_STORE=s3://vign-kops-cluster-state
+
+# create kops config file
+kops create cluster --zones us-east-1a,us-east-1b,us-east-1c ${NAME}
+
+# create sshpublic key for admin
+kops create sshpublickey vign.k8s.local -i ~/.ssh/id_rsa.pub
+
+# edit cluster config
+kops edit cluster $NAME
+
+#get instance groups
+kops get ig
+
+# edit instance group
+kops edit ig nodes master-us-east-1a --name $NAME
+
+# build the cluster with admin access
+kops update cluster $NAME --yes --admin=87600h
+
+# edit kubeconfig with admin access
+kops export kubecfg --admin=87600h
