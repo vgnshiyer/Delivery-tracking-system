@@ -4,6 +4,24 @@ export KOPS_STATE_STORE=s3://vign-kops-cluster-state
 # create kops config file
 kops create cluster --zones us-east-1a,us-east-1b,us-east-1c ${NAME}
 
+#create cluster with existing components
+kops create cluster \
+--kubernetes-version 1.11.1 \
+--dns private \
+--dns-zone ZTN3WOKZEP5J \
+--topology private \
+--state $KOPS_STATE_STORE \
+--networking amazon-vpc-routed-eni \
+--vpc vpc-6dbb8b08 \
+--master-size t2.medium \
+--master-count 1 \
+--cloud aws \
+--zones=us-east-11,us-east-1b,us-east-1c \
+--subnets subnet-b7467a8d,subnet-58f5b62f,subnet-4dd0b714,subnet-f4bc35df \
+--utility-subnets subnet-b0467a8a,subnet-5ef5b629,subnet-56d0b70f,subnet-9cbc35b7 \
+--yes \
+$NAME
+
 # create sshpublic key for admin
 kops create sshpublickey vign.k8s.local -i ~/.ssh/id_rsa.pub
 
@@ -21,3 +39,6 @@ kops update cluster $NAME --yes --admin=87600h
 
 # edit kubeconfig with admin access
 kops export kubecfg --admin=87600h
+
+# validate the cluster
+kops validate cluster
