@@ -6,16 +6,16 @@ kops create cluster --zones us-east-1a,us-east-1b,us-east-1c ${NAME}
 
 #create cluster with existing components
 kops create cluster \
---state $KOPS_STATE_STORE \
---networking amazon-vpc-routed-eni \
 --vpc vpc-0f7ca572 \
 --master-size t3.medium \
 --master-count 1 \
 --cloud aws \
 --zones=us-east-1a,us-east-1b,us-east-1c \
 --subnets subnet-6391183c,subnet-b0d65ad6,subnet-6844cf49 \
---yes \
+--ssh-public-key ~/.ssh/id_rsa.pub \
 $NAME
+
+# kube config file will be inside ~/.kube/config
 
 # validate cluster: kops validate cluster --wait 10m
 # list nodes: 
@@ -30,7 +30,7 @@ kops create sshpublickey vign.k8s.local -i ~/.ssh/id_rsa.pub
 kops edit cluster $NAME
 
 #get instance groups
-kops get ig
+kops get ig --name $NAME
 
 # edit instance group
 kops edit ig nodes master-us-east-1a --name $NAME
@@ -43,3 +43,6 @@ kops export kubecfg --admin=87600h
 
 # validate the cluster
 kops validate cluster
+
+# delete cluster
+kops delete cluster $NAME --yes 
