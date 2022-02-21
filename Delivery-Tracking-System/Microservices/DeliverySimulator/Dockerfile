@@ -1,6 +1,8 @@
 FROM python:3
 
-ADD . /
+WORKDIR app
+
+ADD . /app/
 
 RUN pip install kafka-python
 

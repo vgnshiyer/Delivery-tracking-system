@@ -4,8 +4,7 @@ import json
 from datetime import datetime
 import time
 import threading
-import sys
-import os
+import os, sys, traceback
 
 kafka_endpt = os.environ.get('KAFKA_BROKER_ENDPT')
 
@@ -15,6 +14,7 @@ def getTruckData(jsonfile):
     truckCoords = truckData['features'][0]['geometry']['coordinates']
     truckNumber = truckData['truckNumber']
     truckType = truckData['truckType']
+    f.close()
     return truckNumber,truckType,truckCoords
 
 def generateTruckRecord(coordinates,truckNumber,truckType):
@@ -39,6 +39,7 @@ def sendData(topicname,jsonfile):
     while(i<len(truckCoords)):
         truckRecord=generateTruckRecord(truckCoords[i],truckNumber, truckType)
         time.sleep(3)
+        # print(truckRecord)
         producer.send(topicname, value=truckRecord)
         i+=1
         if i==len(truckCoords):
@@ -50,10 +51,11 @@ def getDeliveryVans(dir):
     kafkatopics=[]
     for i in vehicles:
         if i != "readme.txt":
-            data = json.load(i)
+            f = open(dir+"/"+i)
+            data = json.load(f)
+            f.close()
             kafkatopics.append(data['kafkaTopicName'])
-        else:
-            vehicles.remove("readme.txt")
+    vehicles.remove("readme.txt")
     return vehicles, kafkatopics
     
 def startParallerProducer(topicname, jsonfile):
@@ -61,13 +63,16 @@ def startParallerProducer(topicname, jsonfile):
     p.start()
 
 try:
-    vehicles, kafkatopics = getDeliveryVans("DeliverVans")
-    for i in range(0,len(vehicles)):
-        startParallerProducer(kafkatopics[i],"DeliveryVans/"+str(vehicles[i]))
+    vehicles, kafkatopics = getDeliveryVans("DeliveryVans")
+    for i,vehiclename in enumerate(vehicles):
+        startParallerProducer(kafkatopics[i],"DeliveryVans/"+str(vehiclename))
     
 except Exception as e:
     excp = sys.exc_info()
-    print("The program exited with the following error message at line "+str(excp[2].tb_lineno)+": \n")
+    tb = sys.exc_info()[-1]
+    stk = traceback.extract_tb(tb, 2)
+    fname = stk[-1][2]
+    print("The program exited with the following error message at "+str(fname)+": \n")
     print(e)
 finally:
     print("If this line executed, there is really something wrong with the code")
