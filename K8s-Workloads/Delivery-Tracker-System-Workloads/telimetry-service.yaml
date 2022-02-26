@@ -35,15 +35,3 @@ spec:
         - name: kafka-properties
           secret:
             secretName: kafka-client-config
----
-apiVersion: v1
-kind: Service
-metadata:
-   name: telimetry-service
-spec:
-   selector:
-      app: telimetry-service
-   ports:
-      - name: http
-        port: 5000
-   type: ClusterIP

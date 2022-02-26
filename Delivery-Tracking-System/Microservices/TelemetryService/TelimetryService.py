@@ -41,15 +41,15 @@ def GetData(topicname):
     consumer.poll()
     consumer.seek_to_end()
     for msg in consumer:
-        print(msg)
-        # data=eval(msg)
+        # print(msg.value)
+        data=msg.value
         # print("before\n")
         # print(data)
-        # speed = CalSpeed()
-        # data['speed']=speed
-        # print("after\n")
-        # print(data)
-        # mytab.insert_one(data)
+        speed = CalSpeed()
+        data['speed']=speed
+        print("after\n")
+        print(data)
+        mytab.insert_one(data)
     ## store data in mongo db pod
 
 def startParallerConsumer(topicname):
@@ -63,5 +63,3 @@ except Exception as e:
     excp = sys.exc_info()
     print("The program exited with the following error message at line "+str(excp[2].tb_lineno)+": \n")
     print(e)
-finally:
-    print("If this line executed, there is really something wrong with the code")
