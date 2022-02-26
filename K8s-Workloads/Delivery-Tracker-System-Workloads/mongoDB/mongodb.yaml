@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
       - name: mongo
-        image: mongo:3.5.6-jessie
-        volumeMounts: 
-          - name: mongo-persistent-volume
-            mountPath: /data/db
-      volume:
-        - name: mongo-persistent-volume
-          persistentVolumeClaim:
-            claimName: mongo-pvc  
+        image: mongo:latest
+      #   volumeMounts: 
+      #     - name: mongo-persistent-volume
+      #       mountPath: /data/db
+      # volume:
+      #   - name: mongo-persistent-volume
+      #     persistentVolumeClaim:
+      #       claimName: mongo-pvc  
 ---
 apiVersion: v1
 kind: Service
@@ -33,6 +33,6 @@ spec:
    selector:
       app: mongo
    ports:
-      - name: mongo port
+      - name: mongo-port
         port: 27017
    type: ClusterIP

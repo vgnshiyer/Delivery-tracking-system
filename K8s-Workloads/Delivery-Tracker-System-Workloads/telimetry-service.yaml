@@ -24,6 +24,8 @@ spec:
         env: 
         - name: KAFKA_BROKER_ENDPT
           value: 'kafka'
+        - name: MONGO_DB_ENDPT
+          value: 'mongo'
         ports: 
         - containerPort: 5000
         volumeMounts:
