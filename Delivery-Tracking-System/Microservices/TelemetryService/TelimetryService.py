@@ -34,21 +34,16 @@ def CalSpeed():
     return speed
 
 def GetData(topicname):
-    mytab = InitMongoDB(topicname)
+    mytab = InitMongoDB(topicname.replace("-",""))
     # initialize consumer and mongo client
     consumer = KafkaConsumer(bootstrap_servers=[str(kafka_endpt)+':9071'],value_deserializer=lambda x:json.loads(x.decode('utf-8')))
     consumer.assign([TopicPartition(str(topicname), 0)])
     consumer.poll()
     consumer.seek_to_end()
     for msg in consumer:
-        # print(msg.value)
         data=msg.value
-        # print("before\n")
-        # print(data)
         speed = CalSpeed()
         data['speed']=speed
-        print("after\n")
-        print(data)
         mytab.insert_one(data)
     ## store data in mongo db pod
 
