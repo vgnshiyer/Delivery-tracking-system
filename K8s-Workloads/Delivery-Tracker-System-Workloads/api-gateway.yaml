@@ -24,6 +24,9 @@ spec:
              port: 5000
         ports: 
         - containerPort: 5000
+        env:
+        - name: DELIVERY_TRACKER_ENDPT
+          value: 'delivery-tracker'
 
 ---
 apiVersion: v1

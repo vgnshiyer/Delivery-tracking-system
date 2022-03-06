@@ -10,17 +10,22 @@ import time
 app = Flask(__name__)
 CORS(app)
 
-delivery_tracker_endpt = os.environ('DELIVERY_TRACKER_ENDPT')
+delivery_tracker_endpt = os.environ.get('DELIVERY_TRACKER_ENDPT')
 
 def sendEvents(topicname):
     while(1):
-        res = requests.get(str(delivery_tracker_endpt)+':5000/api/v1/vehicles/'+str(topicname))
+        res = requests.get('http://'+str(delivery_tracker_endpt)+':5000/api/v1/vehicles/'+str(topicname))
         time.sleep(3)
-        yield 'data:{0}\n\n'.format(json.dumps(res.json()))
+        yield 'data:{0}\n\n'.format(res.json())
 
-@app.route('/messages/<topicname>', methods=['GET'])
+@app.route('/api/<topicname>', methods=['GET'])
 def stream(topicname):
     return flask.Response(sendEvents(topicname), mimetype='text/event-stream')
+
+@app.route('/api/vehicles', methods=['GET'])
+def getVehicles():
+    res = requests.get('http://'+str(delivery_tracker_endpt)+':5000/api/v1/vehicles/')
+    return res.json()
 
 @app.route('/', methods=['GET'])
 def index():
