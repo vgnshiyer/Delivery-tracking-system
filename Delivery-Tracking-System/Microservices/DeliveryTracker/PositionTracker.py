@@ -12,22 +12,23 @@ CORS(app)
 
 kafka_endpt = os.environ.get('KAFKA_BROKER_ENDPT')
 mongo_endpt = os.environ.get('MONGO_DB_ENDPT')
-# topicname = os.environ.get('KAFKA_TOPIC_NAME')
+
+## to pass this as configmap to pod.
 topicNames = ["nano-delivery-truck","cargo-delivery-truck"]
 
 client = MongoClient(str(mongo_endpt)+':27017')
 
-@app.route('/vehicles/<topicname>', methods=['GET'])
+@app.route('/api/v1/vehicles/<topicname>', methods=['GET'])
 def sendCoords(topicname):
     mydb=client["Delivery"]
     record = mydb[topicname.replace("-","")].find().sort([('$natural', -1)]).limit(1)[0]
     return json.loads(json_util.dumps(record))
 
-@app.route('/vehicles', methods=['GET'])
+@app.route('/api/v1/vehicles', methods=['GET'])
 def sendVehicle():
     return {"data":topicNames}
 
-@app.route('/api/healthz', methods=['GET'])
+@app.route('/api/v1/healthz', methods=['GET'])
 def healthCheck():
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
