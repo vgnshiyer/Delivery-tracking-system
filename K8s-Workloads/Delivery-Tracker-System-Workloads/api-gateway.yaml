@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sampleapi
+  name: api-gateway
   labels:
-    app: sampleapi
+    app: api-gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sampleapi
+      app: api-gateway
   template:
     metadata:
       labels:
-        app: sampleapi
+        app: api-gateway
     spec:
       containers:
-      - name: sampleapi
-        image: api:latest
+      - name: api-gateway
+        image: brax2507/dts-apigateway:v1
         imagePullPolicy: Never
         readinessProbe: 
           httpGet: 
@@ -29,11 +29,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-   name: sampleapi
+   name: api-gateway
 spec:
    selector:
-      app: sampleapi
+      app: api-gateway
    ports:
       - name: http
         port: 5000
-   type: ClusterIP
+   type: NodePort

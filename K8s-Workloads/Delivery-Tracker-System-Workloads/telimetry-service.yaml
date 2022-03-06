@@ -17,17 +17,11 @@ spec:
       containers:
       - name: telimetry-service
         image: brax2507/telimetry-service:v1
-        readinessProbe: 
-          httpGet: 
-             path: /
-             port: 5000
         env: 
         - name: KAFKA_BROKER_ENDPT
           value: 'kafka'
         - name: MONGO_DB_ENDPT
           value: 'mongo'
-        ports: 
-        - containerPort: 5000
         volumeMounts:
         - name: kafka-properties
           mountPath: /mnt
