@@ -11,7 +11,7 @@ export default function Home({dummy}) {
       </Head>
 
       <div className="">
-        <h1>hello {test()}</h1>
+        <h1>hello!!</h1>
       </div>
     </div>
   )
