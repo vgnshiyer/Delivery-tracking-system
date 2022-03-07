@@ -1,20 +1,7 @@
 import Head from 'next/head'
-import mapboxgl from 'mapbox-gl';
-import {useEffect, useState} from 'react';
+import Map from '../components/Map'
 
-export default function Home() {
-
-  const [pageIsMounted, setPageIsMounted] = useState(false)
-  mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheDI1MDciLCJhIjoiY2t4azgyOXBxNmRwaDJ1cTNjMGRqcjF3ZCJ9.0pJi--39nsT8km17AeiY3g';
-  useEffect(() => {
-    setPageIsMounted(true)
-      const map = new mapboxgl.Map({
-        container: 'my-map', // container ID
-        style: 'mapbox://styles/brax2507/cl0gk3l6m003714p6cpgngplg/draft', // style URL
-        center: [-74.5, 40], // starting position [lng, lat]
-        zoom: 9 // starting zoom
-      });
-  }, [])
+export default function Home({ dummy }) {
 
   return (
     <div className="">
@@ -25,16 +12,52 @@ export default function Home() {
         <link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
       </Head>
 
-      <div className="h-screen max-w-screen-2xl mx-auto" id='my-map' />
-      
+      <Map dummy={dummy} />
     </div>
   )
 }
 
 export async function getServerSideProps(context) {
-  var dummy = {"a":"b"}
 
+  var dummy =
+  {
+    "kafkaTopicName": "cargo-delivery-truck",
+    "truckNumber": 27,
+    "truckType": "Cargo Truck",
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              72.9715347290039,
+              19.1967292074432
+            ],
+            [
+              72.97256469726562,
+              19.196242858212912
+            ],
+            [
+              72.97325134277344,
+              19.195756507545298
+            ],
+            [
+              72.9741096496582,
+              19.195756507545298
+            ],
+            [
+              72.97548294067383,
+              19.1955943903367
+            ]
+          ]
+        }
+      }
+    ]
+  }
   return {
-    props: {dummy}, // will be passed to the page component as props
+    props: { dummy }, // will be passed to the page component as props
   }
 }
