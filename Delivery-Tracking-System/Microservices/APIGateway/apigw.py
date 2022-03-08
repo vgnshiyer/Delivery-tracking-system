@@ -18,7 +18,7 @@ def sendEvents(topicname):
         time.sleep(3)
         yield 'data:{0}\n\n'.format(res.json())
 
-@app.route('/api/<topicname>', methods=['GET'])
+@app.route('/api/vehicles/<topicname>', methods=['GET'])
 def stream(topicname):
     return flask.Response(sendEvents(topicname), mimetype='text/event-stream')
 

@@ -2,6 +2,35 @@ import React from 'react'
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
 
+function CargoTruck(map) {
+    // Create a DOM element for each marker.
+    const el = document.createElement('div');
+    el.className = 'marker';
+    el.style.backgroundImage = `url(https://cdn3.iconfinder.com/data/icons/flat-badges-vol1/100/63_-512.png)`;
+    el.style.width = `30px`;
+    el.style.height = `30px`;
+    el.style.backgroundSize = '100%';
+
+    // Listening to events from api gateway
+    mapMarker1 = [];
+    var source = newEventSource("http://api-gateway:5000/api/vechicles/cargo-delivery-truck");
+    source.addEventListener('message', function (e) {
+        data = JSON.parse(e.data);
+        console.log(data);
+        for (var i = 0; i < mapMarker1.length; i++) {
+            // remove previous marker
+            mapMarker1[i].remove();
+            // remove the element from the array too
+            //mapMarker1.splice(i,1);
+        }
+        // add marker to map
+        const m = new mapboxgl.Marker(el)
+            .setLngLat([data.latitude, data.longitude])
+            .addTo(map);
+        mapMarker1.push(m);
+    }, false);
+}
+
 function Map({ dummy }) {
     const data = dummy.features[0].geometry.coordinates
     //map
@@ -15,29 +44,33 @@ function Map({ dummy }) {
             center: [73.21314042281224, 19.140294971985828], // starting position [lng, lat]
             zoom: 9 // starting zoom
         });
-        let i = 0;
-        function loop() {
-            setTimeout(() => {
-                // Create a DOM element for each marker.
-                const el = document.createElement('div');
-                el.className = 'marker';
-                el.style.backgroundImage = `url(https://cdn3.iconfinder.com/data/icons/flat-badges-vol1/100/63_-512.png)`;
-                el.style.width = `30px`;
-                el.style.height = `30px`;
-                el.style.backgroundSize = '100%';
 
-                // add marker to map
-                const m = new mapboxgl.Marker(el)
-                    .setLngLat([data[i][0], data[i][1]])
-                    .addTo(map);
-                i++;
-                if (i < 4) {
-                    setTimeout(() => {m.remove();}, 3000);
-                    loop();
-                }
-            }, 3000);
-        }
-        loop();
+        CargoTruck(map);
+        // let i = 0;
+        // function loop() {
+        //     setTimeout(() => {
+        //         // Create a DOM element for each marker.
+        //         const el = document.createElement('div');
+        //         el.className = 'marker';
+        //         el.style.backgroundImage = `url(https://cdn3.iconfinder.com/data/icons/flat-badges-vol1/100/63_-512.png)`;
+        //         el.style.width = `30px`;
+        //         el.style.height = `30px`;
+        //         el.style.backgroundSize = '100%';
+
+        //         // add marker to map
+        //         const m = new mapboxgl.Marker(el)
+        //             .setLngLat([data[i][0], data[i][1]])
+        //             .addTo(map);
+        //         i++;
+        //         if (i < 4) {
+        //             setTimeout(() => { m.remove(); }, 3000);
+        //             loop();
+        //         }
+        //     }, 3000);
+        // }
+        // loop();
+
+
     }, []);
     return (
         <div className="h-screen max-w-screen-2xl mx-auto" id='my-map' />
