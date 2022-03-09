@@ -20,46 +20,12 @@ export default function Home({ dummy }) {
 }
 
 export async function getServerSideProps(context) {
-
-  var dummy =
-  {
-    "kafkaTopicName": "cargo-delivery-truck",
-    "truckNumber": 27,
-    "truckType": "Cargo Truck",
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [
-            [
-              72.9715347290039,
-              19.1967292074432
-            ],
-            [
-              72.97256469726562,
-              19.196242858212912
-            ],
-            [
-              72.97325134277344,
-              19.195756507545298
-            ],
-            [
-              72.9741096496582,
-              19.195756507545298
-            ],
-            [
-              72.97548294067383,
-              19.1955943903367
-            ]
-          ]
-        }
-      }
-    ]
-  }
+  // code to get vehicle name from get vehicle names request
+  var xhr = new XMLHttpRequest();
+  var url = "http://api-gateway:5000/api/vechicles";
+  xhr.open("GET", url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
   return {
-    props: { dummy }, // will be passed to the page component as props
+    props: {}, // will be passed to the page component as props
   }
 }

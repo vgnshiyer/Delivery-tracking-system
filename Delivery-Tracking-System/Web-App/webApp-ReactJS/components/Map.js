@@ -2,7 +2,7 @@ import React from 'react'
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
 
-function CargoTruck(map) {
+function track(map, vehicle_name) {
     // Create a DOM element for each marker.
     const el = document.createElement('div');
     el.className = 'marker';
@@ -31,8 +31,7 @@ function CargoTruck(map) {
     }, false);
 }
 
-function Map({ dummy }) {
-    const data = dummy.features[0].geometry.coordinates
+function Map() {
     //map
     const [pageIsMounted, setPageIsMounted] = useState(false)
     mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheDI1MDciLCJhIjoiY2t4azgyOXBxNmRwaDJ1cTNjMGRqcjF3ZCJ9.0pJi--39nsT8km17AeiY3g';
@@ -45,32 +44,9 @@ function Map({ dummy }) {
             zoom: 9 // starting zoom
         });
 
-        CargoTruck(map);
-        // let i = 0;
-        // function loop() {
-        //     setTimeout(() => {
-        //         // Create a DOM element for each marker.
-        //         const el = document.createElement('div');
-        //         el.className = 'marker';
-        //         el.style.backgroundImage = `url(https://cdn3.iconfinder.com/data/icons/flat-badges-vol1/100/63_-512.png)`;
-        //         el.style.width = `30px`;
-        //         el.style.height = `30px`;
-        //         el.style.backgroundSize = '100%';
+        
 
-        //         // add marker to map
-        //         const m = new mapboxgl.Marker(el)
-        //             .setLngLat([data[i][0], data[i][1]])
-        //             .addTo(map);
-        //         i++;
-        //         if (i < 4) {
-        //             setTimeout(() => { m.remove(); }, 3000);
-        //             loop();
-        //         }
-        //     }, 3000);
-        // }
-        // loop();
-
-
+        track(map, vehicle_name);
     }, []);
     return (
         <div className="h-screen max-w-screen-2xl mx-auto" id='my-map' />
