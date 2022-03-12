@@ -3,32 +3,34 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
 
 function mark(map, coords, vehicle_name) {
-    console.log(coords)
-    map.on('load', () => {
-        map.addSource(vehicle_name, {
-            'type': 'geojson',
-            'data': {
-                'type': 'Feature',
-                'properties': {},
-                'geometry': {
-                    'type': 'LineString',
-                    'coordinates': coords 
-                }
+    // console.log(coords)
+    if (map.getSource(vehicle_name)) map.removeSource(vehicle_name);
+    const mark = map.addSource(vehicle_name, {
+        'type': 'geojson',
+        'data': {
+            'type': 'Feature',
+            'properties': {},
+            'geometry': {
+                'type': 'LineString',
+                'coordinates': coords
             }
-        });
-        map.addLayer({
-            'id': vehicle_name,
-            'type': 'line',
-            'source': vehicle_name,
-            'layout': {
-                'line-join': 'round',
-                'line-cap': 'round'
-            },
-            'paint': {
-                'line-color': '#FFFF00',
-                'line-width': 8
-            }
-        });
+        }
+    });
+    //add source for vehicle path tracking
+
+    if (map.getLayer(vehicle_name)) map.removeLayer(vehicle_name);
+    map.addLayer({
+        'id': vehicle_name,
+        'type': 'line',
+        'source': vehicle_name,
+        'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+        },
+        'paint': {
+            'line-color': '#FFFF00',
+            'line-width': 8
+        }
     });
 }
 
@@ -44,8 +46,10 @@ function track(map, vehicle_name, mapMarker, coords) {
     el.style.width = `30px`;
     el.style.height = `30px`;
     el.style.backgroundSize = '100%';
+
     // Listening to events from api gateway
-    var source = new EventSource("http://192.168.29.110:5000/api/vehicles/" + vehicle_name);
+    // var source = new EventSource("http://192.168.29.110:5000/api/vehicles/" + vehicle_name);
+    var source = new EventSource("http://api-gateway:5000/api/vehicles/" + vehicle_name);
     source.addEventListener('message', function (e) {
         let res = JSON.parse(e.data);
         // console.log(res);
@@ -60,7 +64,7 @@ function track(map, vehicle_name, mapMarker, coords) {
             .setLngLat([res.coordinates.latitude, res.coordinates.longitude])
             .addTo(map);
         coords.push([res.coordinates.latitude, res.coordinates.longitude])
-        mark(map,coords,vehicle_name);
+        // mark(map, coords, vehicle_name);
         mapMarker.push(m);
     }, false);
 }
@@ -79,6 +83,7 @@ function Map() {
             pitch: 50
         });
 
+        // send get request to /vehicles
         let vehicles = ["cargo-delivery-truck", "nano-delivery-truck"];
         var vars = {};
         var coords = {};

@@ -24,7 +24,7 @@ def stream(topicname):
 
 @app.route('/api/vehicles', methods=['GET'])
 def getVehicles():
-    res = requests.get('http://'+str(delivery_tracker_endpt)+':5000/api/v1/vehicles/')
+    res = requests.get('http://'+str(delivery_tracker_endpt)+':5000/api/v1/vehicles')
     return res.json()
 
 @app.route('/', methods=['GET'])
