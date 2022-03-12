@@ -49,7 +49,7 @@ function track(map, vehicle_name, mapMarker, coords) {
 
     // Listening to events from api gateway
     // var source = new EventSource("http://192.168.29.110:5000/api/vehicles/" + vehicle_name);
-    var source = new EventSource("http://api-gateway:5000/api/vehicles/" + vehicle_name);
+    var source = new EventSource("http://api-gateway:webapp/api/vehicles/" + vehicle_name);
     source.addEventListener('message', function (e) {
         let res = JSON.parse(e.data);
         // console.log(res);
