@@ -2,22 +2,37 @@ import React from 'react'
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
 
-function mark(vehicle_name) {
-    // Create a DOM element for each marker.
-    const el = document.createElement('div');
-    el.className = 'marker';
-    if (vehicle_name === "cargo-delivery-truck") {
-        el.style.backgroundImage = `url(images/truck1.png)`;
-    } else {
-        el.style.backgroundImage = `url(images/truck2.png)`;
-    }
-    el.style.width = `30px`;
-    el.style.height = `30px`;
-    el.style.backgroundSize = '100%';
-    return el;
+function mark(map, coords, vehicle_name) {
+    console.log(coords)
+    map.on('load', () => {
+        map.addSource(vehicle_name, {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': coords 
+                }
+            }
+        });
+        map.addLayer({
+            'id': vehicle_name,
+            'type': 'line',
+            'source': vehicle_name,
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': '#FFFF00',
+                'line-width': 8
+            }
+        });
+    });
 }
 
-function track(map, vehicle_name,mapMarker) {
+function track(map, vehicle_name, mapMarker, coords) {
     // el = mark(vehicle_name);
     const el = document.createElement('div');
     el.className = 'marker';
@@ -33,7 +48,7 @@ function track(map, vehicle_name,mapMarker) {
     var source = new EventSource("http://192.168.29.110:5000/api/vehicles/" + vehicle_name);
     source.addEventListener('message', function (e) {
         let res = JSON.parse(e.data);
-        console.log(res);
+        // console.log(res);
         for (var i = 0; i < mapMarker.length; i++) {
             // remove previous marker
             mapMarker[i].remove();
@@ -44,6 +59,8 @@ function track(map, vehicle_name,mapMarker) {
         const m = new mapboxgl.Marker(el)
             .setLngLat([res.coordinates.latitude, res.coordinates.longitude])
             .addTo(map);
+        coords.push([res.coordinates.latitude, res.coordinates.longitude])
+        mark(map,coords,vehicle_name);
         mapMarker.push(m);
     }, false);
 }
@@ -58,14 +75,17 @@ function Map() {
             container: 'my-map', // container ID
             style: 'mapbox://styles/brax2507/cl0gk3l6m003714p6cpgngplg/draft', // style URL
             center: [73.21314042281224, 19.140294971985828], // starting position [lng, lat]
-            zoom: 9 // starting zoom
+            zoom: 9, // starting zoom
+            pitch: 50
         });
 
         let vehicles = ["cargo-delivery-truck", "nano-delivery-truck"];
         var vars = {};
+        var coords = {};
         for (let i = 0; i < vehicles.length; i++) {
             vars[i] = [];
-            track(map, vehicles[i], vars[i]);
+            coords[i] = [];
+            track(map, vehicles[i], vars[i], coords[i]);
         }
     }, []);
     return (
