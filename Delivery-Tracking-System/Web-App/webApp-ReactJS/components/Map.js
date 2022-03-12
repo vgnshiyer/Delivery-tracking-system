@@ -2,32 +2,49 @@ import React from 'react'
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useState } from 'react';
 
-function track(map, vehicle_name) {
+function mark(vehicle_name) {
     // Create a DOM element for each marker.
     const el = document.createElement('div');
     el.className = 'marker';
-    el.style.backgroundImage = `url(https://cdn3.iconfinder.com/data/icons/flat-badges-vol1/100/63_-512.png)`;
+    if (vehicle_name === "cargo-delivery-truck") {
+        el.style.backgroundImage = `url(images/truck1.png)`;
+    } else {
+        el.style.backgroundImage = `url(images/truck2.png)`;
+    }
     el.style.width = `30px`;
     el.style.height = `30px`;
     el.style.backgroundSize = '100%';
+    return el;
+}
 
+function track(map, vehicle_name,mapMarker) {
+    // el = mark(vehicle_name);
+    const el = document.createElement('div');
+    el.className = 'marker';
+    if (vehicle_name === "cargo-delivery-truck") {
+        el.style.backgroundImage = "url(https://cdn3.iconfinder.com/data/icons/flat-badges-vol1/100/63_-512.png)";
+    } else {
+        el.style.backgroundImage = "url(https://cdn-icons-png.flaticon.com/512/2555/2555001.png)";
+    }
+    el.style.width = `30px`;
+    el.style.height = `30px`;
+    el.style.backgroundSize = '100%';
     // Listening to events from api gateway
-    mapMarker1 = [];
-    var source = newEventSource("http://api-gateway:5000/api/vechicles/cargo-delivery-truck");
+    var source = new EventSource("http://192.168.29.110:5000/api/vehicles/" + vehicle_name);
     source.addEventListener('message', function (e) {
-        data = JSON.parse(e.data);
-        console.log(data);
-        for (var i = 0; i < mapMarker1.length; i++) {
+        let res = JSON.parse(e.data);
+        console.log(res);
+        for (var i = 0; i < mapMarker.length; i++) {
             // remove previous marker
-            mapMarker1[i].remove();
+            mapMarker[i].remove();
             // remove the element from the array too
-            //mapMarker1.splice(i,1);
+            mapMarker.splice(i, 1); // comment this to save memory..
         }
         // add marker to map
         const m = new mapboxgl.Marker(el)
-            .setLngLat([data.latitude, data.longitude])
+            .setLngLat([res.coordinates.latitude, res.coordinates.longitude])
             .addTo(map);
-        mapMarker1.push(m);
+        mapMarker.push(m);
     }, false);
 }
 
@@ -44,9 +61,12 @@ function Map() {
             zoom: 9 // starting zoom
         });
 
-        
-
-        track(map, vehicle_name);
+        let vehicles = ["cargo-delivery-truck", "nano-delivery-truck"];
+        var vars = {};
+        for (let i = 0; i < vehicles.length; i++) {
+            vars[i] = [];
+            track(map, vehicles[i], vars[i]);
+        }
     }, []);
     return (
         <div className="h-screen max-w-screen-2xl mx-auto" id='my-map' />
