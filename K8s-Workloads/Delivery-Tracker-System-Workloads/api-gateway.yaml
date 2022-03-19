@@ -39,4 +39,5 @@ spec:
    ports:
       - name: http
         port: 5000
+        nodePort: 30050
    type: NodePort

@@ -16,10 +16,10 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: webapp:latest
+        image: brax2507/dts-webapp:v1
         imagePullPolicy: Never
         ports: 
-        - containerPort: 80
+        - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
@@ -32,5 +32,6 @@ spec:
       app: webapp
    ports:
       - name: http
-        port: 80
-   type: ClusterIP
+        port: 3000
+        nodePort: 30080
+   type: NodePort

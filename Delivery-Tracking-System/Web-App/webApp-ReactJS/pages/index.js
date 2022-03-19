@@ -14,17 +14,17 @@ export default function Home({ dummy }) {
       </Head>
 
       <Header />
-      <Map dummy={dummy} />
+      <Map />
     </div>
   )
 }
 
 export async function getServerSideProps(context) {
   // code to get vehicle name from get vehicle names request
-  var xhr = new XMLHttpRequest();
-  var url = "http://api-gateway:5000/api/vechicles";
-  xhr.open("GET", url, true);
-  xhr.setRequestHeader("Content-Type", "application/json");
+  // var xhr = new XMLHttpRequest();
+  // var url = "http://api-gateway:5000/api/vechicles";
+  // xhr.open("GET", url, true);
+  // xhr.setRequestHeader("Content-Type", "application/json");
   return {
     props: {}, // will be passed to the page component as props
   }
