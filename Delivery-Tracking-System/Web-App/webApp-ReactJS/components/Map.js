@@ -34,11 +34,10 @@ function mark(map, coords, vehicle_name) {
     });
 }
 
-function httpGet(theUrl)
-{
+function httpGet(theUrl) {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-    xmlHttp.send( null );
+    xmlHttp.open("GET", theUrl, false); // false for synchronous request
+    xmlHttp.send(null);
     return xmlHttp.responseText;
 }
 
@@ -46,7 +45,7 @@ function track(map, vehicle_name, mapMarker, coords) {
     // el = mark(vehicle_name);
     const el = document.createElement('div');
     el.className = 'marker';
-    el.style.backgroundImage = "url(/images/"+ vehicle_name +".png)"
+    el.style.backgroundImage = "url(/images/" + vehicle_name + ".png)"
     el.style.width = `30px`;
     el.style.height = `30px`;
     el.style.backgroundSize = '100%';
@@ -67,9 +66,16 @@ function track(map, vehicle_name, mapMarker, coords) {
             // remove the element from the array too
             mapMarker.splice(i, 1); // uncomment this to save memory..
         }
+
+        // create the popup
+        const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            '<B style="font-size:13px">' + vehicle_name + '</B>'
+        );
+
         // add marker to map
         const m = new mapboxgl.Marker(el)
             .setLngLat([res.coordinates.latitude, res.coordinates.longitude])
+            .setPopup(popup)
             .addTo(map);
         coords.push([res.coordinates.latitude, res.coordinates.longitude])
         // mark(map, coords, vehicle_name);
@@ -93,7 +99,7 @@ function Map() {
 
         // get vehicle names to track
         let vehicles = JSON.parse(httpGet("http://192.168.29.110:5000/api/vehicles"))["data"]
-        
+
         var vars = {};
         var coords = {};
         for (let i = 0; i < vehicles.length; i++) {
