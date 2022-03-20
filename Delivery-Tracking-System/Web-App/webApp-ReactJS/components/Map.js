@@ -34,22 +34,30 @@ function mark(map, coords, vehicle_name) {
     });
 }
 
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
 function track(map, vehicle_name, mapMarker, coords) {
     // el = mark(vehicle_name);
     const el = document.createElement('div');
     el.className = 'marker';
-    if (vehicle_name === "cargo-delivery-truck") {
-        el.style.backgroundImage = "url(https://cdn3.iconfinder.com/data/icons/flat-badges-vol1/100/63_-512.png)";
-    } else {
-        el.style.backgroundImage = "url(https://cdn-icons-png.flaticon.com/512/2555/2555001.png)";
-    }
+    el.style.backgroundImage = "url(/images/"+ vehicle_name +".png)"
     el.style.width = `30px`;
     el.style.height = `30px`;
     el.style.backgroundSize = '100%';
 
     // Listening to events from api gateway
-    // var source = new EventSource("http://192.168.29.110:5000/api/vehicles/" + vehicle_name);
-    var source = new EventSource("http://api-gateway:webapp/api/vehicles/" + vehicle_name);
+
+    // for local development testing
+    var source = new EventSource("http://192.168.29.110:5000/api/vehicles/" + vehicle_name);
+
+    // for production in kubernetes
+    // var source = new EventSource("http://api-gateway:webapp/api/vehicles/" + vehicle_name);
     source.addEventListener('message', function (e) {
         let res = JSON.parse(e.data);
         // console.log(res);
@@ -57,7 +65,7 @@ function track(map, vehicle_name, mapMarker, coords) {
             // remove previous marker
             mapMarker[i].remove();
             // remove the element from the array too
-            mapMarker.splice(i, 1); // comment this to save memory..
+            mapMarker.splice(i, 1); // uncomment this to save memory..
         }
         // add marker to map
         const m = new mapboxgl.Marker(el)
@@ -83,8 +91,9 @@ function Map() {
             pitch: 50
         });
 
-        // send get request to /vehicles
-        let vehicles = ["cargo-delivery-truck", "nano-delivery-truck"];
+        // get vehicle names to track
+        let vehicles = JSON.parse(httpGet("http://192.168.29.110:5000/api/vehicles"))["data"]
+        
         var vars = {};
         var coords = {};
         for (let i = 0; i < vehicles.length; i++) {
