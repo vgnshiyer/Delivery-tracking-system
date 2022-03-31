@@ -1,5 +1,5 @@
 ## point minikube to local docker registry
-## --ONLY FOR DEVELOPMENT PURPOSE--
+## --ONLY FOR DEVELOPMENT PURPOSE-- ##
 minikube docker-env
 SET DOCKER_TLS_VERIFY=1
 SET DOCKER_HOST=tcp://127.0.0.1:62010
