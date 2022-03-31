@@ -1,3 +1,11 @@
+'''
+This code performs below steps:
+1. Parses json data on dir DeliveryVans/
+2. Produces messages with map coordinates to kafka topics.
+3. Topics have the same name as the json file names.
+4. Producer is run as a thread for each vehicle parallely and produces messages in an infinite loop.
+'''
+
 import kafka
 from kafka import KafkaProducer
 import json
