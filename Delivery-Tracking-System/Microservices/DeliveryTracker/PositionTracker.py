@@ -1,3 +1,9 @@
+'''
+This code performs below steps:
+1. Expose endpoint /api/v1/vehicles/<topicname> to send current vehicle coordinates.
+2. Expose endpoint /api/v1/vehicles/ to send known vehicles.
+'''
+
 from pydoc_data.topics import topics
 from flask_cors import CORS
 from flask import Flask, request

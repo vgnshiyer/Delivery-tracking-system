@@ -1,3 +1,9 @@
+'''
+This code does below:
+1. Expose endpoint /api/vehicles/<topicname> to stream vehicle coordinates.
+2. Expose endpoint /api/vehicles/ to give list of vehicles.
+'''
+
 from flask import Flask, request
 import flask
 from flask_cors import CORS

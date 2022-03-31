@@ -1,3 +1,10 @@
+'''
+This code performs below steps:
+1. Consumes data from kafka topic for the vehicle.
+2. Calculate speed of the vehicle.
+3. Push data to mongo db for data persistence
+'''
+
 from kafka import KafkaConsumer
 from kafka import TopicPartition
 import json
