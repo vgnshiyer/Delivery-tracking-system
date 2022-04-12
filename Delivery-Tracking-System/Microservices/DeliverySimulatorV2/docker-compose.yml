@@ -9,4 +9,4 @@ services:
     volumes:
       - ./app:/app
     command: >
-      sh -c "python ./src/main.py"
+      sh -c "python ./app/main.py"
