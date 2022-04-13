@@ -8,11 +8,13 @@ This code performs below steps:
 
 import logging
 import os
+from packages.vehicle-data-generator import getDeliveryVehicleData
+import threading
 
 ## VARS
 jsonpath = 'public/delivery-vans'
 ## ENV vars
-
+kafka_endpt = os.environ.get('KAFKA_BROKER_ENDPT')
 
 # setting custom logger format
 FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
@@ -28,45 +30,15 @@ else:
 # setting logger mode
 logger.setLevel(logging.DEBUG)
 
-def getDeliveryVehicleData(dir):
-    vehicles=os.listdir(dir)
-    vehicle_data = {}
-    for vehicle in vehicles:
-        temp = {}
-        if vehicle != "readme.txt":
-            f = open(dir+"/"+i)
-            data = json.load(f)
-            f.close()
-            temp['kafka-topic-name'] = data['kafkaTopicName']
-            temp['truck-number'] = data['truckNumber']
-            temp['truck-type'] = data['truckType']
-            temp['truck-coordinates'] = data['features'][0]['geometry']['coordinates']
-            vehicle_data[vehicle] = temp
-            del temp
-            
-    logger.debug('Found following vehicle data {}'.format(*vehicle_data.values()))
-    logger.debug(vehicle_data)
-    return vehicle_data
+
+def startParallelProducer(vehicle):
+    p = threading.Thread(target=sendData, args=(topicname,))
+    p.start()
 
 if __name__ == "__main__":
-    vehicle_data = getDeliveryVehicleData(jsonpath)
-    '''
-    {
-        vehicle_name(filename): {
-            kafkatopicname: something,
-            queuename: someotherthing,
-            trucknumber: #,
-            trucktype: sometype,
-            truckCoords: [
-                [
-                    72.9715347290039,
-                    19.1967292074432
-                ],
-                ...
-            ]
-        },
-        ...
-    }
-    '''
-    ## vehicle_name.vehicle_name.truckcoords[*]
-    ## now we pass this data as it is to vehicle simulator package to simulate vehicle movement
+    vehicle_data = getDeliveryVehicleData(logger,jsonpath)
+    logger.debug('Found following vehicle data {}'.format(*vehicle_data.values()))
+    logger.debug(vehicle_data)
+    
+    # for vehicle in vehicle_data.values():
+    #     startParallerProducer(vehicle)
