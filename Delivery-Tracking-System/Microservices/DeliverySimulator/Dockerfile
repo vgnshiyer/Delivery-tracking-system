@@ -1,9 +1,10 @@
 FROM python:3
+LABEL maintainer="VIGNESH IYER"
 
-WORKDIR app
+COPY requirements.txt ./
 
-ADD . /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install kafka-python
+WORKDIR /app
 
-CMD [ "python", "./positionSimulator.py" ]
+ADD /app /app
