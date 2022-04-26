@@ -1,7 +1,7 @@
 {
     "kafkaTopicName": "jumbo-delivery-truck",
     "truckNumber": 47,
-    "truckType": "Jumbo Truck",
+    "truckType": "Jumbo_Truck",
     "type": "FeatureCollection",
     "features": [
       {

@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  build: .
+  volumes:
+    - ./app:/app
+  environment:
+    KAFKA_BROKER_ENDPT: "kafka"
+    MONGO_DB_ENDPT: "mongodb"
+  command: >
+    sh -c "python main.py"
+

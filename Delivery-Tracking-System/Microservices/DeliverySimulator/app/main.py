@@ -1,47 +1,59 @@
-'''
-This code performs below steps:
-1. Parses json data on dir public/delivery-vans
-2. Produces messages with map coordinates to kafka topics/ActiveMQ queue.
-3. Topics/Queues have the same name as the json file names.
-4. Producer is run as a thread for each vehicle parallely and produces messages in an infinite loop.
-'''
-import time, sys, os, traceback
 import logging
 from packages.VehicleDataGenerator import getDeliveryVehicleData
-from packages.kafkaSimulator import startParallelProducer
-from kafka import KafkaProducer
+from packages.VehicleDataGenerator import generateTruckRecord
+from packages import Simulator
+import sys, os, traceback
+import threading, time
+from datetime import datetime
 
-## VARS
-jsonpath = 'public/delivery-vans'
-## ENV vars
-kafka_endpt = os.environ.get('KAFKA_BROKER_ENDPT')
+#VARS
+jsonpath = os.environ.get('DATA_PATH')
+mq_url = os.environ.get('RABBITMQ_URL')
+queuename = os.environ.get('QUEUE')
 
-# setting custom logger format
-FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
+LOG_FORMAT = '%(asctime)s - %(lineno)s:%(funcName)s - %(levelname)s - %(message)s'
+# LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(name) -30s %(funcName) '
+            #   '-35s %(lineno) -5d: %(message)s')
 logger = logging.getLogger()
-if logger.handlers:
-    for handler in logger.handlers:
-        # logger.removeHandler(handler)
-        handler.setFormatter(logging.Formatter(FORMAT))
-else:
-        handler = logging.StreamHandler()
-        handler.setFormatter(logging.Formatter(FORMAT))
-        logger.addHandler(handler)
-# setting logger mode
-logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter(LOG_FORMAT))
+logger.addHandler(handler)
 
-# producer = KafkaProducer(bootstrap_servers=[str(kafka_endpt)+':9071'],value_serializer=lambda x:json.dumps(x).encode('utf-8'))
-logger.debug('Opened connection with kafka broker {} for producing data.'.format(kafka_endpt))
+def sendData(client, vehicle):
+    """ This method generates the json msg using the generateRecord function and send
+    the data as a payload of type application/json to queue.
+    
+    this function iterates over the list of coordinates and produces them infinitely
+    to the queue to simulate vehicle movement.
+    """
+    logger.info("Producing truck coordinates for {}".format(vehicle['truck-type']))
+    count = 0
+    while count < len(vehicle['coordinates']):
+        msg = generateTruckRecord(vehicle['truck-type'], vehicle['truck-number'], vehicle['coordinates'][count])
+        time.sleep(3)
+        client.send_message(msg)
+        logger.debug("Sent message")
+        logger.debug(msg)
+        count += 1
+        if len(vehicle['coordinates']) == count:
+            count = 0
+            vehicle['coordinates'] = vehicle['coordinates'][::-1]
 
-if __name__ == "__main__":
-    try:
+def main():
+    logger.setLevel(logging.INFO)
+    # fhandler = logging.FileHandler('app.logs')
+    # fhandler.setFormatter(logging.Formatter(LOG_FORMAT))
+    # logger.addHandler(handler)
+    try:    
         vehicle_data = getDeliveryVehicleData(jsonpath)
-        logger.debug('Found following vehicle data {}'.format(*vehicle_data.keys()))
-        
+
         for vehicle in vehicle_data.values():
-            ## dont forget to pass the producer client object
-            startParallelProducer(logger, vehicle)
+            client = Simulator.RabitMQProducer(mq_url, queuename)
+            client.connect()
+            p = threading.Thread(target=sendData, args=(client,vehicle,))
+            p.start()
             
+        
     except Exception as e:
         excp = sys.exc_info()
         tb = sys.exc_info()[-1]
@@ -49,3 +61,6 @@ if __name__ == "__main__":
         fname = stk[-1][2]
         logger.info("The program exited with the following error message at "+str(fname)+": \n")
         logger.error(e)
+
+if __name__ == "__main__":
+    main()
