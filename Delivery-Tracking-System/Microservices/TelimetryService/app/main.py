@@ -1,6 +1,6 @@
 import logging
 import sys, os, traceback
-from pymongo import MongoClient
+from packages import Consumer
 import random
 
 #VARS
@@ -21,18 +21,19 @@ def CalSpeed():
     return speed
 
 def main():
-    mongo_client = MongoClient(str(mongo_endpt)+':'+mongo_port)
-    logger.info('Established connection with mongo client on {}:{}'.format(mongo_endpt,mongo_port))
-    mydb=client["Delivery"]
+    logger.setLevel(logging.INFO)
+    # fhandler = logging.FileHandler('app.logs')
+    # fhandler.setFormatter(logging.Formatter(LOG_FORMAT))
+    # logger.addHandler(handler)
     
-    mq_client = Consumer.RabitMQConsumer(mq_url, queuename, mydb)
+    mq_client = Consumer.RabbitMQConsumer(mq_url, queuename, persist_data=True, mongo_dest=mongo_endpt)
     mq_client.connect()
     mq_client.start_consumer()
 
 if __name__ == '__main__':
     try:
         main()
-    except:
+    except Exception as e:
         excp = sys.exc_info()
         tb = sys.exc_info()[-1]
         stk = traceback.extract_tb(tb, 2)
