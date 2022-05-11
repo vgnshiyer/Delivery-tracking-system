@@ -2,17 +2,22 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from main.models import DeliveryVehicle
+from main.models import *
 from .serializers import DeliveryVehicleSerializer
 
 @api_view(['GET'])
-def getData(request):
-    vehicles = DeliveryVehicle.objects.all()
-    serializer = DeliveryVehicleSerializer(vehicles, many=True)
-    return Response(serializer.data)
+def apiOverview(request):
+    urls = {
+        'vehicles/':'get delivery vehicles'
+    }
+    return Response(urls)
 
-@api_view(['POST'])
-def add_vehicle(request):
-    serializer = DeliveryVehicleSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+@api_view(['GET'])
+def getVehicles(request):
+    response = getDeliveryVehicles()
+    return response
+
+@api_view(['GET'])
+def getVehicleData(request, vehiclename):
+    response = getVehiclePosition(vehiclename)
+    return response
