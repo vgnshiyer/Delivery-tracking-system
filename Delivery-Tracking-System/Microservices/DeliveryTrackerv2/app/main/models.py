@@ -19,4 +19,4 @@ def getDeliveryVehicles():
 def getVehiclePosition(vehiclename):
     # logger.info('Sending most recent coordinates for vehicle {}'.format(topicname))
     record = db_handle[vehiclename].find().sort([('$natural', -1)]).limit(1)[0]
-    return json.loads(json_util.dumps(record))
+    return json.loads(json_util.dumps({ "data":record }))

@@ -4,13 +4,19 @@ from rest_framework.decorators import api_view
 from main.models import DeliveryVehicle
 from main.models import *
 from .serializers import DeliveryVehicleSerializer
+from django.http import HttpResponse
+import os
+import markdown
 
-@api_view(['GET'])
+BASE = os.path.dirname(os.path.abspath(__file__))
+
+# @api_view(['GET'])
 def apiOverview(request):
-    urls = {
-        'vehicles/':'get delivery vehicles'
-    }
-    return Response(urls)
+    """Present Documentation"""
+    
+    with open(os.path.join(BASE, "Readme.md"), 'r') as markdown_file:
+        content = markdown_file.read()
+        return HttpResponse(markdown.markdown(content))
 
 @api_view(['GET'])
 def getVehicles(request):
