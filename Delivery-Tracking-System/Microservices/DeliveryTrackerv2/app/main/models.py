@@ -1,12 +1,17 @@
 from django.db import models
 import utils
 import json
+import os
+
+mongo_endpt = os.environ.get('MONGO_DB_ENDPT')
+mongo_port = os.environ.get('MONGO_DB_PORT')
+mongo_db_name = os.environ.get('MONGO_DB_NAME')
 
 class DeliveryVehicle(models.Model):
     vehiclename = models.CharField(max_length=200)
     created = models.DateField(auto_now_add=True)
     
-db_handle, client = utils.get_db_handle('Delivery', 'mongo', '27017')
+db_handle, client = utils.get_db_handle(mongo_db_name, mongo_endpt, mongo_port)
 
 def getDeliveryVehicles():
     # logger.debug(request.headers)
