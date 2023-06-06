@@ -6,8 +6,9 @@ The centerpiece of the system is the Kafka cluster, which acts as a distributed 
 
 ![Blank diagram](https://github.com/vgnshiyer/Delivery-tracking-system/assets/39982819/008766d1-07e5-4948-bded-51a61d03811a)
 
-The deployment of this architecture is tailored to run on an Elastic Kubernetes Service (EKS) cluster within the Amazon Web Services (AWS) environment. However, the repository also provides instructions and appropriate directories for deploying the system on other platforms such as KOPS and Minikube. This flexibility allows users to adapt the deployment process based on their specific infrastructure requirements.
+The deployment of this architecture is tailored to run on an Elastic Kubernetes Service (EKS) cluster within the Amazon Web Services (AWS) environment. However, the repository also provides instructions and appropriate directories for deploying the system on other platforms such as KOPS and Minikube.
+The above mentioned instructions can be found in the DevOps/ directory.
 
-Furthermore, the repository includes Terraform and CloudFormation configurations specifically designed for setting up the EKS cluster on AWS. These configurations automate the provisioning of the necessary infrastructure resources, such as EC2 instances, networking components, and security groups, to ensure a smooth deployment process.
+The repository also includes Terraform and CloudFormation configurations specifically designed for setting up the EKS cluster on AWS. These configurations automate the provisioning of the necessary infrastructure resources, such as EC2 instances, networking components, and security groups, to ensure a smooth deployment process.
 
-By following the steps outlined in the repository, users can effortlessly deploy the microservice architecture and leverage the powerful features of Kafka to build a robust delivery tracking system. The architecture's scalability, fault tolerance, and decoupled nature enable efficient handling of various components, such as order management, inventory tracking, and notifications, contributing to an overall seamless delivery experience for customers.
+By following the steps outlined in the repository, you can deploy the microservice architecture and leverage the powerful features of Kafka to build a robust delivery tracking system. The architecture's scalability, fault tolerance, and decoupled nature enable efficient handling of various components, such as order management, inventory tracking, and notifications, contributing to an overall seamless delivery experience for customers.
