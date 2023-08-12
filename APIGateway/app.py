@@ -33,7 +33,7 @@ def initLogger():
 
 def sendEvents(topicname):
     while(1):
-        res = requests.get('http://'+str(delivery_tracker_endpt)+':5000/api/v1/vehicles/'+str(topicname))
+        res = requests.get('http://'+str(delivery_tracker_endpt)+':5000/api/v1/vehicles/'+str(topicname)) ## convert to rpc later
         time.sleep(3)
         yield 'data:{0}\n\n'.format(res.json())
 
@@ -51,8 +51,9 @@ def getVehicles():
 @app.route('/', methods=['GET'])
 def index():
     logger.debug(request.headers)
-    return '<H3>Welcome To Delivery Tracking System. Please hit /messages path to get vehicle coordinates.</H3>'
+    return '<H3>Welcome To Delivery Tracking System API. Please hit /api/vehicles/<vehicle-name> path to get vehicle coordinates.</H3>'
 
 if __name__ == '__main__':
+    initLogger()
     app.debug = True
     app.run(host='0.0.0.0', port=5000)

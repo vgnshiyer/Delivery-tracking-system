@@ -1,3 +1,5 @@
+set -e
+
 ## Useful Kubectl aliases ##
 ############################
 alias k='kubectl'

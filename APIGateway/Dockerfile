@@ -1,13 +1,18 @@
 FROM python:3
 
-ADD . /
+# Set the working directory
+WORKDIR /app
 
-RUN pip install flask
+# Copy only necessary files
+COPY app.py /app/
+COPY requirements.txt /app/
 
-RUN pip install -U flask-cors
+# Install dependencies
+RUN pip install -r requirements.txt
 
-RUN pip install requests
+# Expose the specified port
+ENV PORT=5000
+EXPOSE $PORT
 
-EXPOSE 5000
-
-CMD [ "python", "./apigw.py" ]
+# Set the entrypoint
+ENTRYPOINT ["python", "./app.py"]

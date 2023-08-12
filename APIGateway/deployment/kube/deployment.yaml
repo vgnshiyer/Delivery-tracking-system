@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gw
+  labels:
+    app: api-gw # label to help service to bind with the deployment
+spec:
+  replicas: 2 # REPLICASET DEFINITION BEGINS HERE
+  selector:
+    matchLabels:
+      app: api-gw # select labels for selecting pods inside a deployment
+  template: # template to replicaSet for creating pods
+    metadata: # POD DEFINITION BEGINS HERE
+      labels:
+        app: api-gw # pod label to help map to a deployment via a replicaSet
+    spec: # pod specs
+      containers:
+      - name: api-gw
+        image: dts/api-gw
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DELIVERY_TRACKER_ENDPOINT
+          value: 'delivery-tracker'
