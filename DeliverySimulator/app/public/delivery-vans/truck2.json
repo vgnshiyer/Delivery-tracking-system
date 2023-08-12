@@ -1,7 +1,6 @@
 {
-  "kafkaTopicName": "nano-delivery-truck",
-  "truckNumber": 9,
-  "truckType": "Nano_Truck",
+  "truckNumber": 2,
+  "truckType": "Box_Truck",
   "type": "FeatureCollection",
   "features": [
     {

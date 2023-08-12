@@ -7,7 +7,6 @@
 '''json
 {
         vehicle_name(filename): {
-            kafkatopicname: something,
             queuename: someotherthing,
             trucknumber: #,
             trucktype: sometype,

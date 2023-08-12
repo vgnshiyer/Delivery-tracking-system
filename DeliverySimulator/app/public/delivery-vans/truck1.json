@@ -1,7 +1,6 @@
 {
-    "kafkaTopicName": "cargo-delivery-truck",
-    "truckNumber": 27,
-    "truckType": "Cargo_Truck",
+    "truckNumber": 1,
+    "truckType": "Heavy_Duty",
     "type": "FeatureCollection",
     "features": [
       {
