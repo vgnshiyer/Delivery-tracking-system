@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  type: NodePort
+  selector:
+    app: rabbitmq
+  ports:
+    - name: aqmp
+      protocol: TCP
+      port: 5672
+      targetPort: 5672
+      nodePort: 30001
+    - name: http
+      protocol: TCP
+      port: 15672
+      targetPort: 15672
+      nodePort: 30002
+    

@@ -59,19 +59,19 @@ def getDeliveryVehicleData(dir=None):
 
     return vehicle_data
 
-async def send_data(client, vehicle):
-    """
-    This coroutine generates JSON messages using the generateRecord function
-    and sends the data as payloads of type application/json to the queue.
-
-    This coroutine iterates over the list of coordinates and produces them
-    infinitely to the queue to simulate vehicle movement.
+def sendData(client, vehicle):
+    """ This method generates the json msg using the generateRecord function and send
+    the data as a payload of type application/json to queue.
+    
+    this function iterates over the list of coordinates and produces them infinitely
+    to the queue to simulate vehicle movement.
     """
     logger.info("Producing truck coordinates for {}".format(vehicle['truck-type']))
     count = 0
     while count < len(vehicle['coordinates']):
         msg = generateTruckRecord(vehicle['truck-type'], vehicle['truck-number'], vehicle['coordinates'][count])
-        await client.send_message(msg)  # Await the asynchronous send_message function
+        time.sleep(3)
+        client.send_message(msg)
         logger.debug("Sent message")
         logger.debug(msg)
         count += 1
@@ -79,27 +79,19 @@ async def send_data(client, vehicle):
             count = 0
             vehicle['coordinates'] = vehicle['coordinates'][::-1]
 
-
-async def main():
-    logger.setLevel(logging.DEBUG)
+def main():
+    logger.setLevel(logging.INFO)
     # fhandler = logging.FileHandler('app.logs')
     # fhandler.setFormatter(logging.Formatter(LOG_FORMAT))
     # logger.addHandler(handler)
-
-    try:
+    try:    
         vehicle_data = getDeliveryVehicleData(jsonpath)
 
-        client = Simulator.RabitMQProducer(mq_url, queuename)
-        await client.connect()
-
-        tasks = []
         for vehicle in vehicle_data.values():
-            task = asyncio.create_task(send_data(None, vehicle))
-            tasks.append(task)
-
-        await asyncio.gather(*tasks)
-
-        await client.disconnect()  # Disconnect the client after all tasks are done
+            client = Simulator.RabitMQProducer(mq_url, queuename)
+            client.connect()
+            p = threading.Thread(target=sendData, args=(client,vehicle,))
+            p.start()
         
     except Exception as e:
         excp = sys.exc_info()
@@ -110,4 +102,4 @@ async def main():
         logger.error(e)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

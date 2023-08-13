@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-simulator
+  labels:
+    app: delivery-simulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery-simulator
+  template:
+    metadata:
+      labels:
+        app: delivery-simulator
+    spec:
+      containers:
+      - name: delivery-simulator
+        image: dts/simulator
+        imagePullPolicy: Never
+        env:
+        - name: DATA_PATH
+          value: 'public/delivery-vans'
+        - name: RABBITMQ_URL
+          value: 'rabbitmq'
+        - name: QUEUE
+          value: 'vehicle_coordinates'
