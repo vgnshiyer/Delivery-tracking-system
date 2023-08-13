@@ -34,6 +34,7 @@ class RabitMQProducer(object):
         """
         logger.info('Connecting to {}'.format(self.url))
         self.channel = pika.BlockingConnection(pika.ConnectionParameters(self.url,self.CONNECTION_PORT,'/',self.CREDS)).channel()
+        self.channel.queue_declare(queue=self.queuename, durable=True)
     
     def send_message(self, msg):
         """This method gets the json data and sends it as a payload to RabbitMQ broker.    
