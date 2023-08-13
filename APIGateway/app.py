@@ -37,10 +37,10 @@ def sendEvents(topicname):
         time.sleep(3)
         yield 'data:{0}\n\n'.format(res.json())
 
-@app.route('/api/vehicles/<topicname>', methods=['GET'])
-def stream(topicname):
+@app.route('/api/vehicles/<vehiclename>', methods=['GET'])
+def stream(vehiclename):
     logger.info('Sending most recent coordinates every 3 seconds.')
-    return flask.Response(sendEvents(topicname), mimetype='text/event-stream')
+    return flask.Response(sendEvents(vehiclename), mimetype='text/event-stream')
 
 @app.route('/api/vehicles', methods=['GET'])
 def getVehicles():

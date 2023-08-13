@@ -1,0 +1,35 @@
+syntax = "proto3";
+package tracker;
+
+import "google/protobuf/struct.proto";
+
+service Tracker {
+    
+    // get list of vehicles to be tracked
+    rpc GetVehicles(GetVehiclesRequest) returns (GetVehiclesResponse) {}
+    
+    // track a particular vehicle
+    rpc StreamVehicleCoordinates(StreamVehicleCoordinatesRequest) returns (stream StreamVehicleCoordinatesResponse) {}
+}
+
+message GetVehiclesRequest {
+}
+
+message GetVehiclesResponse {
+    repeated string vehicle_names = 1;
+}
+
+message StreamVehicleCoordinatesRequest {
+    string vehicle_name = 1;
+}
+
+message StreamVehicleCoordinatesResponse {
+    VehicleRecord vehicleRecord = 1;
+}
+
+message VehicleRecord {
+    string truck_type = 1;
+    string truck_number = 2;
+    string timestamp = 3;
+    google.protobuf.Struct coordinates = 4;
+}

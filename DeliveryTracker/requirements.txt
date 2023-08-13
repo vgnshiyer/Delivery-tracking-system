@@ -1,0 +1,4 @@
+aio_pika==9.2.1
+grpc==1.0.0
+protobuf==4.24.0
+pymongo==4.4.1

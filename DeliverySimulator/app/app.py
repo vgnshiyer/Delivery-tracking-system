@@ -70,7 +70,7 @@ def sendData(client, vehicle):
     count = 0
     while count < len(vehicle['coordinates']):
         msg = generateTruckRecord(vehicle['truck-type'], vehicle['truck-number'], vehicle['coordinates'][count])
-        time.sleep(3)
+        time.sleep(5)
         client.send_message(msg)
         logger.debug("Sent message")
         logger.debug(msg)
