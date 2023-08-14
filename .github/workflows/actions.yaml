@@ -1,0 +1,46 @@
+name: Delivery Tracking System deployment job
+on: 
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up minikube
+        uses: medyagh/setup-minikube@latest
+
+      - name: List pods
+        run: kubectl get po -A
+
+      - name: Build docker images
+        run: |
+          chmod +x ./.github/workflows/scripts/build_images.sh
+          ./.github/workflows/scripts/build_images.sh
+
+      - name: List images
+        run: docker image ls
+
+      - name: Deploy to Kubernetes cluster
+        run: |
+          chmod +x ./.github/workflows/scripts/deploy.sh
+          ./.github/workflows/scripts/deploy.sh
+
+      - name: List resources
+        run: kubectl get all
+
+      - name: List service urls
+        run: kubectl get svc
+      
+      - name: Serve web-app
+        run: |
+          sleep 30
+          minikube service webapp --url
+
