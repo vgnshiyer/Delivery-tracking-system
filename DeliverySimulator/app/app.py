@@ -30,7 +30,6 @@ def generateTruckRecord(truckType,truckNumber,coordinates):
     return truckRecord
 
 def getDeliveryVehicleData(dir=None):
-    if not dir: dir = 'public/delivery-vans'
     """Generating a refined json of all the data available in jsonpath dir in below format
         {
         vehicle_name(filename): {
@@ -43,6 +42,7 @@ def getDeliveryVehicleData(dir=None):
         ...
         }   
     """
+    if not dir: dir = 'public/delivery-vans'
     vehicles=os.listdir(dir)
     vehicle_data = {}
     for vehicle in vehicles:
@@ -51,7 +51,7 @@ def getDeliveryVehicleData(dir=None):
             f = open(dir+"/"+vehicle)
             data = json.load(f)
             f.close()
-            temp['truck-number'] = data['truckNumber']
+            temp['truck-number'] = 'truck' + str(data['truckNumber'])
             temp['truck-type'] = data['truckType']
             temp['coordinates'] = data['features'][0]['geometry']['coordinates']
             vehicle_data[vehicle] = temp
@@ -70,7 +70,7 @@ def sendData(client, vehicle):
     count = 0
     while count < len(vehicle['coordinates']):
         msg = generateTruckRecord(vehicle['truck-type'], vehicle['truck-number'], vehicle['coordinates'][count])
-        time.sleep(5)
+        time.sleep(3)
         client.send_message(msg)
         logger.debug("Sent message")
         logger.debug(msg)

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+spec:
+  # serviceName: mongodb
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: "mongo:latest"
+          ports:
+            - name: mongo-default
+              protocol: TCP
+              containerPort: 27017
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "0.2"
+          

@@ -45,8 +45,10 @@ def stream(vehiclename):
 @app.route('/api/vehicles', methods=['GET'])
 def getVehicles():
     logger.debug(request.headers)
-    res = requests.get('http://'+str(delivery_tracker_endpt)+':5000/api/v1/vehicles/')
-    return res.json()
+    res = requests.get('http://'+str(delivery_tracker_endpt)+':5000/api/v1/vehicles')
+    res.raise_for_status()
+    if res.status_code != 204:
+        return res.json()
 
 @app.route('/', methods=['GET'])
 def index():

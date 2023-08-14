@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telimetry-service
+  labels:
+    app: telimetry-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telimetry-service
+  template:
+    metadata:
+      labels:
+        app: telimetry-service
+    spec:
+      containers:
+      - name: telimetry-service
+        image: dts/telemetry
+        imagePullPolicy: Never
+        env:
+        - name: MONGO_DB_ENDPT
+          value: 'mongodb'
+        - name: RABBITMQ_URL
+          value: 'rabbitmq'
+        - name: INP_QUEUE
+          value: 'vehicle_coordinates'
+        - name: OP_QUEUE
+          value: 'delivery'

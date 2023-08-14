@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: api-gw
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: api-gw ## exposes all pods that belong to deployment with label app: api-gw
   ports:
