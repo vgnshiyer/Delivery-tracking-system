@@ -1,5 +1,8 @@
 # Delivery Tracking System
 
+<img src=".github/gif/app.gif?raw=true" width="400px">
+
+---
 The primary objective of this project is to create a highly scalable and reliable microservice architecture for a delivery tracking system.
 
 The centerpiece of the system is the RabbitMQ service, which acts as a distributed messaging queue. It enables seamless communication and data exchange between various microservices within the architecture. By leveraging RabbitMQ's robustness and fault tolerance, the delivery tracking system can handle high volumes of data and ensure reliable message processing. The architecure of the system is depicted in the diagram provided below.
