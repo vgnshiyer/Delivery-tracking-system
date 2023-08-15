@@ -1,6 +1,6 @@
 # Delivery Tracking System
 
-<img src=".github/gif/app.gif?raw=true" width="400px">
+<img src=".github/gif/app.gif?raw=true" width="700px">
 
 ---
 The primary objective of this project is to create a highly scalable and reliable microservice architecture for a delivery tracking system.
