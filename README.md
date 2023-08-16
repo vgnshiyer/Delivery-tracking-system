@@ -7,7 +7,7 @@ The primary objective of this project is to create a highly scalable and reliabl
 
 The centerpiece of the system is the RabbitMQ service, which acts as a distributed messaging queue. It enables seamless communication and data exchange between various microservices within the architecture. By leveraging RabbitMQ's robustness and fault tolerance, the delivery tracking system can handle high volumes of data and ensure reliable message processing. The architecure of the system is depicted in the diagram provided below.
 
-![Untitled drawio](https://github.com/vgnshiyer/Delivery-tracking-system/assets/39982819/34dc10c9-aedf-4dc3-83a0-b14900359110)
+![Untitled Diagram drawio](https://github.com/vgnshiyer/Delivery-tracking-system/assets/39982819/5c876c39-79eb-4576-80e2-ac5f68d80880)
 
 The deployment of this architecture is tailored to run on an Elastic Kubernetes Service (EKS) cluster within the Amazon Web Services (AWS) environment. However, the repository also provides instructions and appropriate directories for deploying the system on other platforms such as KOPS and Minikube.
 The above mentioned instructions can be found in the DevOps/ directory.
