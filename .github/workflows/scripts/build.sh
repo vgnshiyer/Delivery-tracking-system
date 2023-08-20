@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+# set -e
 
 # setup minikube Docker environment
 eval $(minikube docker-env)

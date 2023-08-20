@@ -22,8 +22,8 @@ jobs:
 
       - name: Build docker images
         run: |
-          chmod +x ./.github/workflows/scripts/build_images.sh
-          ./.github/workflows/scripts/build_images.sh
+          chmod +x ./.github/workflows/scripts/build.sh
+          ./.github/workflows/scripts/build.sh
 
       - name: List images
         run: docker image ls
@@ -38,6 +38,9 @@ jobs:
 
       - name: List service urls
         run: kubectl get svc
+
+      - name: Expose api-gw
+        run: minikube tunnel > /dev/null &
       
       - name: Serve web-app
         run: |

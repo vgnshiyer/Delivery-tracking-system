@@ -1,9 +1,19 @@
 #!/bin/bash
-set -e
+# set -e
 
 ls -lrth
 
 # Run k8s manifests
+
+# switch to namespace dts
+kubectl create ns dts --dry-run=client -o yaml | kubectl apply -f -
+kubectl config set-context --current --namespace="dts"
+
+# database
+kubectl apply -f ./Database/deployment/kube/.
+
+# queue
+kubectl apply -f ./Queue/deployment/kube/.
 
 # webapp
 kubectl apply -f ./Web-App/deployment/kube/.

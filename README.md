@@ -19,34 +19,39 @@ By following the steps outlined in the repository, you can deploy the microservi
 ### Run it on a local minikube cluster.
 
 1. Assuming that you have minikube installed, start a minikube cluster.
-
 ```
 minikube start
 ```
 
 2. Run docker builds.
-
 ```
-chmod +x ./github/workflows/scripts/build_images.sh
-./github/workflows/scripts/build_images.sh
+chmod +x ./github/workflows/scripts/build.sh
+./github/workflows/scripts/build.sh
 ```
 
 3. Run k8s application manifests
-
 ```
 chmod +x ./github/workflows/scripts/deploy.sh
 ./github/workflows/scripts/deploy.sh
 ```
 
 4. Verify all k8s resources are created in the minikube cluster.
-
 ```
 kubectl get all
 ```
 
-5. Serve the webpage and open the app on the browser.
-
+5. Expose api-gw if using minikube
 ```
-minikube service webapp
+minikube tunnel > /dev/null &
+```
+
+6. Serve the webpage and open the app on the browser.
+```
+minikube service webapp -n dts
 ```
 This command will automatically open the webapp on your browser window.
+
+7. Purge all resources
+```
+chmod +x ./github/workflows/scripts/destroy.sh
+```
