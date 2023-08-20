@@ -45,5 +45,5 @@ jobs:
       - name: Serve web-app
         run: |
           sleep 30
-          minikube service webapp --url
+          minikube service webapp -n dts --url
 
