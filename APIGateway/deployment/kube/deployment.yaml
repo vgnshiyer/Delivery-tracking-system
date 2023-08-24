@@ -22,4 +22,19 @@ spec:
         - containerPort: 5000
         env:
         - name: DELIVERY_TRACKER_ENDPT
-          value: 'delivery-tracker'
+          valueFrom:
+            configMapKeyRef:
+              name: appconfig
+              key: DELIVERY_TRACKER_ENDPT
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 3
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 3

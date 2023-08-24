@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  DELIVERY_TRACKER_ENDPT: delivery-tracker
+  MONGO_DB_ENDPT: mongodb
+  RABBITMQ_URL: rabbitmq
+  DATA_PATH: public/delivery-vans
+  QUEUE: vehicle_coordinates
+  INP_QUEUE: vehicle_coordinates
+  OP_QUEUE: delivery
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: appconfig

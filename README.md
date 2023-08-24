@@ -40,9 +40,9 @@ chmod +x ./github/workflows/scripts/deploy.sh
 kubectl get all
 ```
 
-5. Expose api-gw if using minikube
+5. Expose api-gw if using minikube (run it in a separate terminal)
 ```
-minikube tunnel > /dev/null &
+minikube tunnel
 ```
 
 6. Serve the webpage and open the app on the browser.

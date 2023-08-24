@@ -52,7 +52,7 @@ def sendVehicle():
     logger.debug(vehicles)
     return { "data":vehicles }
 
-@app.route('/api/v1/healthz', methods=['GET'])
+@app.route('/api/v1/health', methods=['GET'])
 def healthCheck():
     logger.debug(request.headers)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 

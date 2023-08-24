@@ -55,6 +55,11 @@ def index():
     logger.debug(request.headers)
     return '<H3>Welcome To Delivery Tracking System API. Please hit /api/vehicles/<vehicle-name> path to get vehicle coordinates.</H3>'
 
+@app.route('/api/health', methods=['GET'])
+def healthcheck():
+    logger.debug(request.headers)
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
 if __name__ == '__main__':
     initLogger()
     app.debug = True

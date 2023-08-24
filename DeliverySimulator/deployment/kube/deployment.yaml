@@ -20,8 +20,17 @@ spec:
         imagePullPolicy: Never
         env:
         - name: DATA_PATH
-          value: 'public/delivery-vans'
+          valueFrom:
+            configMapKeyRef:
+              name: appconfig
+              key: DATA_PATH
         - name: RABBITMQ_URL
-          value: 'rabbitmq'
-        - name: QUEUE
-          value: 'vehicle_coordinates'
+          valueFrom:
+            configMapKeyRef:
+              name: appconfig
+              key: RABBITMQ_URL
+        - name: INP_QUEUE
+          valueFrom:
+            configMapKeyRef:
+              name: appconfig
+              key: INP_QUEUE

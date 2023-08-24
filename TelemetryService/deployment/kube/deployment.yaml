@@ -20,10 +20,22 @@ spec:
         imagePullPolicy: Never
         env:
         - name: MONGO_DB_ENDPT
-          value: 'mongodb'
+          valueFrom:
+            configMapKeyRef:
+              name: appconfig
+              key: MONGO_DB_ENDPT
         - name: RABBITMQ_URL
-          value: 'rabbitmq'
+          valueFrom:
+            configMapKeyRef:
+              name: appconfig
+              key: RABBITMQ_URL
         - name: INP_QUEUE
-          value: 'vehicle_coordinates'
+          valueFrom:
+            configMapKeyRef:
+              name: appconfig
+              key: INP_QUEUE
         - name: OP_QUEUE
-          value: 'delivery'
+          valueFrom:
+            configMapKeyRef:
+              name: appconfig
+              key: OP_QUEUE

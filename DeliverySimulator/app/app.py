@@ -8,7 +8,7 @@ import asyncio
 #VARS
 jsonpath = os.environ.get('DATA_PATH')
 mq_url = os.environ.get('RABBITMQ_URL')
-queuename = os.environ.get('QUEUE')
+queuename = os.environ.get('INP_QUEUE')
 
 LOG_FORMAT = '%(asctime)s - %(lineno)s:%(funcName)s - %(levelname)s - %(message)s'
 # LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(name) -30s %(funcName) '
