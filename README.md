@@ -23,6 +23,10 @@ By following the steps outlined in the repository, you can deploy the microservi
 minikube start
 ```
 
+**Note:** For testing in minikube, make sure to point minikube to local docker registry.
+
+Run `eval $(minikube docker-env)`
+
 2. Run docker builds.
 ```
 chmod +x ./github/workflows/scripts/build.sh

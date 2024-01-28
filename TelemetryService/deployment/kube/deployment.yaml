@@ -5,7 +5,7 @@ metadata:
   labels:
     app: telimetry-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: telimetry-service

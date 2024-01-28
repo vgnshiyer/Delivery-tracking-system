@@ -9,6 +9,9 @@ ls -lrth
 kubectl create ns dts --dry-run=client -o yaml | kubectl apply -f -
 kubectl config set-context --current --namespace="dts"
 
+# configmap
+kubectl apply -f .env/configmap.yaml
+
 # database
 kubectl apply -f ./Database/deployment/kube/.
 
